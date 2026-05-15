@@ -1,0 +1,13 @@
+{
+  "name": "opencode-session-logger",
+  "private": true,
+  "type": "module",
+  "main": "./index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0"
+  }
+}
