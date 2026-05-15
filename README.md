@@ -10,59 +10,26 @@ Clone this repo into your project plugin directory so OpenCode loads it automati
 git clone <repo-url> .opencode/plugins/opencode-session-logger
 ```
 
-Install the development dependencies for the plugin:
+Add to gitignore
 
-```sh
-cd .opencode/plugins/opencode-session-logger
-npm install
+```
+# OpenCode
+.opencode/session-logs
+.opencode/plugins
 ```
 
-Validate that `index.ts` type-checks:
+Add to opencode.jsonc
 
-```sh
-npm run typecheck
 ```
-
-## What it logs
-
-- user messages
-- assistant messages
-- tool calls
-- tool results
-
-It does not log reasoning parts, summaries, patch metadata, provider wire traffic, or the assembled system prompt.
-
-## Output
-
-By default it writes files to:
-
-```text
-.opencode/session-logs/<sessionID>.json
-```
-
-Each file contains normalized messages like:
-
-```json
 {
-  "sessionID": "...",
-  "updatedAt": "...",
-  "messages": [
-    {
-      "id": "...",
-      "role": "user",
-      "content": "...",
-      "toolCalls": []
-    }
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": [
+    [
+      ".opencode/plugins/opencode-session-logger",
+      {
+        "outputDir": ".opencode/session-logs"
+      }
+    ]
   ]
 }
 ```
-
-## Configure in opencode
-
-No `opencode.json` entry is required for a local plugin in `.opencode/plugins/`.
-
-If you want to change the output directory, edit the plugin source or publish the plugin as an npm package and configure it through `opencode.json`.
-
-## Options
-
-- `outputDir`: relative to the session directory unless absolute

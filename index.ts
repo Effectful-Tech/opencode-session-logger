@@ -32,6 +32,7 @@ type LoggedMessage = {
 
 type SessionLog = {
   sessionID: string
+  cwd: string
   updatedAt: string
   messages: Array<LoggedMessage>
 }
@@ -44,6 +45,7 @@ const watchedEvents = new Set([
 ])
 
 export default async function sessionLoggerPlugin(input: PluginInput, options?: PluginOptions) {
+  const sessionCwd = path.resolve(input.directory)
   const outputDir = path.resolve(input.directory, options?.outputDir ?? ".opencode/session-logs")
   const writes = new Map<string, Promise<void>>()
   const sessions = new Map<string, SessionLog>()
@@ -63,7 +65,7 @@ export default async function sessionLoggerPlugin(input: PluginInput, options?: 
       const next = previous
         .catch(() => undefined)
         .then(async () => {
-          const current = sessions.get(sessionID) ?? { sessionID, updatedAt: "", messages: [] }
+          const current = sessions.get(sessionID) ?? { sessionID, cwd: sessionCwd, updatedAt: "", messages: [] }
           const next = applyEvent(current, event)
           next.updatedAt = new Date().toISOString()
           sessions.set(sessionID, next)
